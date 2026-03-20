@@ -1,4 +1,5 @@
-from math import ceil
+from math import ceil as mathCeil
+from random import randint as randomInterger
 
 class Entity:
     def __init__(self, name, strength, dexterity, vigor, intelligence, wisdom):
@@ -10,7 +11,7 @@ class Entity:
         self.wisdom = wisdom
         self.rightHand = "Unarmed"
         self.leftHand = "Unarmed"
-        self.health = ceil(8 + (self.vigor * 0.75) + (self.strength * 0.25))
+        self.health = mathCeil(8 + (self.vigor * 0.75) + (self.strength * 0.25))
 
     def debugPrint(self):
         print(f"Entity: {self.name}")
@@ -22,6 +23,13 @@ class Entity:
         print(f"Right Hand: {self.rightHand}")
         print(f"Left Hand: {self.leftHand}")
         print(f"Health: {self.health}")
+
+    def attack(self, alvo):
+        print(f"{self.name} está atacando {alvo.name} com {self.rightHand} e {self.leftHand}!")
+        if randomInterger(1, 20) + self.strength > 10:  # Simples teste de ataque
+            damage = mathCeil(self.strength * 0.5)
+            alvo.health -= damage
+            print(f"Acertou! {alvo.name} recebeu {damage} de dano. Saúde restante: {alvo.health}")
 
 if __name__ == "__main__":
     Entity("Goblin", 5, 3, 4, 2, 1).debugPrint()
