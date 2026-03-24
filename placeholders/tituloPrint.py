@@ -2,15 +2,14 @@ import random
 import time
 import sys
 
-from asciiTitulo import tituloLargo
+from asciiTitulo import titulo
 import armas
 
 title = titulo
 symbols = "!:;@"
 
-DARK_RED    = "\033[31m"
-PURPLE      = "\033[35m"   # ← changed
-COLOR       = PURPLE
+COLORS    = ["\033[35m", "\033[34m", "\033[33m", "\033[32m", "\033[31m"] # Roxo, Azul, Amarelo, Verde, Vermelho
+COLOR       = COLORS[0] # Troque o número aqui para trocar de cor
 RESET       = COLOR
 
 lines = title.split("\n")
