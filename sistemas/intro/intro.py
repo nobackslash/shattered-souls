@@ -2,7 +2,13 @@
 import time
 import os
 import random
-from util.config import WIDTH, HEIGHT
+from turtle import clear
+import pygame
+# from util.config import WIDTH, HEIGHT
+from asciiTitle import tituloLargo
+
+WIDTH = 120
+HEIGHT = 30
 
 text1 = "one day you woke up"
 text2 = "when you looked around, nothing was the same"
@@ -14,6 +20,22 @@ glich_fx = "░▒▓█"
 # text2 = "debug2"
 # text3 = "debug3"
 # text4 = "debug4"
+
+def show_title():
+    pygame.mixer.music.load("moonlight reversed.mp3")
+    pygame.mixer.music.play()
+
+    original_lines = [list(line) for line in tituloLargo.split("\n")]
+    lines = [row.copy() for row in original_lines]
+    height = len(lines)
+
+    for line in lines:
+        print("".join(line).center(WIDTH))
+
+    time.sleep(1)
+
+    return lines, original_lines, height
+
 
 def print_title_cutscene(text: str, final = False):
     global WIDTH, HEIGHT
@@ -48,6 +70,7 @@ def print_title_cutscene(text: str, final = False):
             glitched = glitched[:visible_chars]
             print(f"\033[31m{glitched}\033[0m".center(WIDTH), end="\r")
             time.sleep(0.2)
+        play_awake_cut()
 
 def glitch_effect(text: str, intensity: float = 0.1) -> str:
     global glich_fx
@@ -61,7 +84,18 @@ def glitch_effect(text: str, intensity: float = 0.1) -> str:
 
     return glitched_text
 
+def play_awake_cut():
+    awake = pygame.mixer.Sound("awake.mp3")
+    awake.play()
+
+    clear()
+    time.sleep(awake.get_length())
+    clear()
+
+
 def full_title_animation():
+    
+
     print_title_cutscene(text1)
     time.sleep(1)
     print_title_cutscene(text2)
@@ -69,7 +103,14 @@ def full_title_animation():
     print_title_cutscene(text3)
     time.sleep(1)
     print_title_cutscene(text4, final=True)
+    time.sleep(2)
+
+    lines, original_lines, height = show_title()
 
 if __name__ == "__main__": # Debug only
+    pygame.mixer.init()
+    awake = pygame.mixer.Sound("awake.mp3")
+    awake.play()
+    
     full_title_animation()
     time.sleep(5)
