@@ -1,7 +1,4 @@
-import intro.intro
-from util.config import screen_config
+import shatteredsouls.sistemas.intro2.intro2 as mainIntro
 
 if __name__ == "__main__":
-    screen_config()
-    intro.intro.full_title_animation() 
-    
+    mainIntro.main()

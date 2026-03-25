@@ -7,11 +7,11 @@ import atexit
 import shutil
 import re
 
-from shatteredsouls import assets
-from title import ascii_title
-from glitchLoop import glitch_loop
+import shatteredsouls.assets as assets
+from shatteredsouls.sistemas.intro2.title import ascii_title
+from shatteredsouls.sistemas.intro2.glitchLoop import glitch_loop
 
-width = shutil.get_terminal_size().columns
+WIDTH = shutil.get_terminal_size().columns
 HEIGHT = shutil.get_terminal_size().lines
 
 glich_fx = "░▒▓█"
@@ -30,9 +30,9 @@ atexit.register(cleanup)
 def visible_length(text):
     return len(ANSI_REGEX.sub('', text))
 
-def center_ansi(text, width):
+def center_ansi(text, WIDTH):
     real_len = visible_length(text)
-    padding = max(0, (width - real_len) // 2)
+    padding = max(0, (WIDTH - real_len) // 2)
     return " " * padding + text
 
 def color_line(text):
@@ -61,39 +61,65 @@ def type_line(text):
     for char in text:
         current += char
         display = color_line(current)
-        print("\r" + center_ansi(display, width).ljust(width), end="", flush=True)
+        print("\r" + center_ansi(display, WIDTH).ljust(WIDTH), end="", flush=True)
         time.sleep(0.04 if char != " " else 0.08)
     time.sleep(0.5)
 
 def wipe_line():
-    print("\r" + " " * width, end="", flush=True)
+    print("\r" + " " * WIDTH, end="", flush=True)
 
-def glitch_text(text, intensity):
-    result = ""
-    for c in text:
-        if random.random() < intensity:
-            result += random.choice(glich_fx)
-        elif random.random() < intensity * 0.3:
-            result += " "
+# def glitch_text(text, intensity):
+#     result = ""
+#     for c in text:
+#         if random.random() < intensity:
+#             result += random.choice(glich_fx)
+#         elif random.random() < intensity * 0.3:
+#             result += " "
+#         else:
+#             result += c
+#     return result
+
+def glitch_effect(text: str, intensity: float = 0.1) -> str:
+    global glich_fx
+
+    glitched_text = ""
+    for char in text:
+        if random.random() < intensity: # chance of glitching each character
+            glitched_text += random.choice(glich_fx)
         else:
-            result += c
-    return result
+            glitched_text += char
+
+    return glitched_text
 
 def glitch_disappear(text):
     for i in range(10):
         intensity = (i + 1) / 10
-        glitched = glitch_text(text, intensity)
-        print("\r" + center_ansi(f"\033[31m{glitched}\033[0m", width).ljust(width), end="", flush=True)
+        glitched = glitch_effect(text, intensity)
+        print("\r" + center_ansi(f"\033[31m{glitched}\033[0m", WIDTH).ljust(WIDTH), end="", flush=True)
         time.sleep(0.2)
+
+def glitch_disappear(text_string):
+    for i in range(10):
+        intensity = (i + 1) / 10
+        glitched = glitch_effect(text_string, intensity=intensity)
+        visible_chars = int(len(text_string) * (1 - intensity))
+        glitched = glitched[:visible_chars]
+        # print(f"\033[31m{glitched}\033[0m".center(WIDTH), end="\r")
+        print("\r" + center_ansi(f"\033[31m{glitched}\033[0m", WIDTH).ljust(WIDTH), end="", flush=True)
+        time.sleep(0.05)
+
 
 def final_phase(text):
     awake = pygame.mixer.Sound(assets.sfx["glitch_sfx"])
+    # os.system("start")
     awake.play()
 
     # Cause a "explosão" quando o awake tocar. e depois limpe.
     glitch_disappear(color_line(text))
 
-    time.sleep(max(0, awake.get_length() - 0.25))
+
+    earlyCutoff = 3
+    time.sleep(max(0, awake.get_length() - earlyCutoff))
     clear()
 
 def show_title():
@@ -115,7 +141,7 @@ def show_title():
 
     for line in lines:
         colored = "".join(base_colorize(c) for c in line)
-        print(center_ansi(colored, width))
+        print(center_ansi(colored, WIDTH))
 
     time.sleep(1)
     return lines, original_lines, height
@@ -141,7 +167,7 @@ def main():
     lines, original_lines, height = show_title()
 
     try:
-        asyncio.run(glitch_loop(lines, height, width, original_lines))
+        asyncio.run(glitch_loop(lines, height, WIDTH, original_lines))
     except KeyboardInterrupt:
         pass
 
