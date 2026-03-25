@@ -22,7 +22,7 @@ glich_fx = "░▒▓█"
 # text4 = "debug4"
 
 def show_title():
-    pygame.mixer.music.load("moonlight reversed.mp3")
+    pygame.mixer.music.load("sistemas/intro/Moonlight Reversed.mp3")
     pygame.mixer.music.play()
 
     original_lines = [list(line) for line in tituloLargo.split("\n")]
@@ -85,7 +85,7 @@ def glitch_effect(text: str, intensity: float = 0.1) -> str:
     return glitched_text
 
 def play_awake_cut():
-    awake = pygame.mixer.Sound("awake.mp3")
+    awake = pygame.mixer.Sound("sistemas/intro/awake.mp3")
     awake.play()
 
     clear()
@@ -109,8 +109,5 @@ def full_title_animation():
 
 if __name__ == "__main__": # Debug only
     pygame.mixer.init()
-    awake = pygame.mixer.Sound("awake.mp3")
-    awake.play()
-    
     full_title_animation()
     time.sleep(5)
