@@ -1,11 +1,14 @@
-# import util
 import time
 import os
 import random
 from turtle import clear
 import pygame
 # from util.config import WIDTH, HEIGHT
-from asciiTitle import tituloLargo
+# from asciiTitle import tituloLargo
+import intro.title as title
+
+# Initialize pygame and mixer at module level
+pygame.mixer.init()
 
 WIDTH = 120
 HEIGHT = 30
@@ -22,10 +25,13 @@ glich_fx = "░▒▓█"
 # text4 = "debug4"
 
 def show_title():
-    pygame.mixer.music.load("sistemas/intro/Moonlight Reversed.mp3")
-    pygame.mixer.music.play()
+    try:
+        pygame.mixer.music.load("intro/moonlight reversed.mp3")
+        pygame.mixer.music.play()
+    except (pygame.error, FileNotFoundError) as e:
+        print(f"Warning: Could not load audio: {e}")
 
-    original_lines = [list(line) for line in tituloLargo.split("\n")]
+    original_lines = [list(line) for line in title.ascii_title.split("\n")]
     lines = [row.copy() for row in original_lines]
     height = len(lines)
 
@@ -85,11 +91,15 @@ def glitch_effect(text: str, intensity: float = 0.1) -> str:
     return glitched_text
 
 def play_awake_cut():
-    awake = pygame.mixer.Sound("sistemas/intro/awake.mp3")
-    awake.play()
+    try:
+        awake = pygame.mixer.Sound("intro/awake.mp3")
+        awake.play()
+        time.sleep(awake.get_length())
+    except (pygame.error, FileNotFoundError) as e:
+        print(f"Warning: Could not play awake sound: {e}")
+        time.sleep(1)
 
     clear()
-    time.sleep(awake.get_length())
     clear()
 
 
