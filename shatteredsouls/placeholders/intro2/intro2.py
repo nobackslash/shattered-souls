@@ -7,7 +7,8 @@ import atexit
 import shutil
 import re
 
-from placeholders.intro2.title import tituloLargo
+from shatteredsouls import assets
+from title import ascii_title
 from glitchLoop import glitch_loop
 
 width = shutil.get_terminal_size().columns
@@ -86,7 +87,7 @@ def glitch_disappear(text):
         time.sleep(0.2)
 
 def final_phase(text):
-    awake = pygame.mixer.Sound("sistemas/intro/awake.mp3")
+    awake = pygame.mixer.Sound(assets.sfx["glitch_sfx"])
     awake.play()
 
     # Cause a "explosão" quando o awake tocar. e depois limpe.
@@ -96,10 +97,10 @@ def final_phase(text):
     clear()
 
 def show_title():
-    pygame.mixer.music.load("sistemas/intro/Moonlight Reversed.mp3")
+    pygame.mixer.music.load(assets.sfx["title_sfx"])
     pygame.mixer.music.play()
 
-    original_lines = [list(line) for line in tituloLargo.split("\n")]
+    original_lines = [list(line) for line in ascii_title.split("\n")]
     lines = [row.copy() for row in original_lines]
     height = len(lines)
 
