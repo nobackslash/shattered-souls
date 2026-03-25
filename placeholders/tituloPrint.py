@@ -2,10 +2,10 @@ import random
 import time
 import sys
 
-from intro2.asciiTitle import tituloLargo
+from intro2.title import ascii_title
 import armas
 
-title = tituloLargo
+title = ascii_title
 symbols = "!:;@"
 
 COLORS    = ["\033[35m", "\033[34m", "\033[33m", "\033[32m", "\033[31m"] # Roxo, Azul, Amarelo, Verde, Vermelho

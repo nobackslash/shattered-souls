@@ -7,7 +7,7 @@ import atexit
 import shutil
 import re
 
-from asciiTitle import tituloLargo
+from placeholders.intro2.title import tituloLargo
 from glitchLoop import glitch_loop
 
 width = shutil.get_terminal_size().columns
@@ -86,17 +86,13 @@ def glitch_disappear(text):
         time.sleep(0.2)
 
 def final_phase(text):
-    # play sound
     awake = pygame.mixer.Sound("sistemas/intro/awake.mp3")
     awake.play()
 
-    # glitch explosion
+    # Cause a "explosão" quando o awake tocar. e depois limpe.
     glitch_disappear(color_line(text))
 
-    # wait remaining sound duration
     time.sleep(max(0, awake.get_length() - 0.25))
-    clear()
-    time.sleep(0.2)
     clear()
 
 def show_title():

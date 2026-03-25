@@ -17,24 +17,22 @@ def center_ansi(text, width):
     return " " * padding + text
 
 
-# -------- PURPLE DECAY (same logic as red) --------
+# -------- Colorização dos caracteres --------
 
 def colorize_char(c):
     if c == "@":
-        return "\033[35m@\033[0m"      # medium purple (main)
+        return "\033[35m@\033[0m"     # Roxo
     elif c == "!":
-        return "\033[2;35m!\033[0m"    # dim purple (fading)
+        return "\033[2;35m!\033[0m"   # Roxo
     elif c == ":":
-        return "\033[90m:\033[0m"      # gray (dead)
+        return "\033[90m:\033[0m"     # Cinza
     return c
 
 
-# -------- GLITCH LOOP --------
+# -------- Loop principal --------
 
 async def glitch_loop(lines, height, width, original_lines):
     step = 0
-
-    print("\033[?25l", end="")  # hide cursor
 
     while True:
         render_lines = []
@@ -55,7 +53,6 @@ async def glitch_loop(lines, height, width, original_lines):
 
             render_lines.append(new_line)
 
-        # render frame
         print("\033[H", end='')
 
         colored_lines = []
