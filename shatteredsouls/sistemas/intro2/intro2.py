@@ -63,7 +63,7 @@ def type_line(text):
         display = color_line(current)
         print("\r" + center_ansi(display, WIDTH).ljust(WIDTH), end="", flush=True)
         time.sleep(0.04 if char != " " else 0.08)
-    time.sleep(0.5)
+    time.sleep(0.9)
 
 def wipe_line():
     print("\r" + " " * WIDTH, end="", flush=True)
@@ -91,12 +91,12 @@ def glitch_effect(text: str, intensity: float = 0.1) -> str:
 
     return glitched_text
 
-def glitch_disappear(text):
-    for i in range(10):
-        intensity = (i + 1) / 10
-        glitched = glitch_effect(text, intensity)
-        print("\r" + center_ansi(f"\033[31m{glitched}\033[0m", WIDTH).ljust(WIDTH), end="", flush=True)
-        time.sleep(0.2)
+# def glitch_disappear(text):
+#     for i in range(10):
+#         intensity = (i + 1) / 10
+#         glitched = glitch_effect(text, intensity)
+#         print("\r" + center_ansi(f"\033[31m{glitched}\033[0m", WIDTH).ljust(WIDTH), end="", flush=True)
+#         time.sleep(0.2)
 
 def glitch_disappear(text_string):
     for i in range(10):
@@ -106,7 +106,7 @@ def glitch_disappear(text_string):
         glitched = glitched[:visible_chars]
         # print(f"\033[31m{glitched}\033[0m".center(WIDTH), end="\r")
         print("\r" + center_ansi(f"\033[31m{glitched}\033[0m", WIDTH).ljust(WIDTH), end="", flush=True)
-        time.sleep(0.05)
+        time.sleep(0.1)
 
 
 def final_phase(text):
@@ -156,6 +156,8 @@ def main():
         "You knew you were going to die."
     ]
 
+    print("\n" * 20)
+
     for line in lines_to_show[:-1]:
         type_line(line)
         wipe_line()
@@ -163,6 +165,8 @@ def main():
     final_line = lines_to_show[-1]
     type_line(final_line)
     final_phase(final_line)
+
+    print("\n" * 15)
 
     lines, original_lines, height = show_title()
 

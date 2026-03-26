@@ -60,6 +60,7 @@ async def glitch_loop(lines, height, width, original_lines):
             colored_line = "".join(colorize_char(c) for c in line)
             colored_lines.append(center_ansi(colored_line, width))
 
+        print("\n" * 15)
         print("\n".join(colored_lines))
 
         step += 1
