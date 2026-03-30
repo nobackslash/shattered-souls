@@ -1,5 +1,4 @@
-from entidades import Entity
-from char_creation import cena
+from shatteredsouls.systems.menu.character_creation import cena
 import msvcrt
 import os
 
@@ -79,6 +78,6 @@ while repetir:
 
 escolher_classe = cena()
 print(f'{escolher_classe.name}, você escolheu a classe {escolher_classe.classe}!')
-print(f"Seus atributos são: Strength: {escolher_classe.strength}, Dexterity: {escolher_classe.dexterity}, Vigor: {escolher_classe.vigor}, Intelligence: {escolher_classe.intelligence}, Wisdom: {escolher_classe.wisdom} e Health: {escolher_classe.health}.")
+print(f"Seus atributos são: Strength: {escolher_classe.strength}, Dexterity: {escolher_classe.dexterity}, Vigor: {escolher_classe.vigor}, Intelligence: {escolher_classe.will}, Wisdom: {escolher_classe.wisdom} e Health: {escolher_classe.health}.")
 
 

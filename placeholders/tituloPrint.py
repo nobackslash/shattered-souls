@@ -3,7 +3,7 @@ import time
 import sys
 
 from intro2.title import ascii_title
-import armas
+import shatteredsouls.sistemas.combate.weapons as weapons
 
 title = ascii_title
 symbols = "!:;@"

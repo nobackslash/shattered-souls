@@ -28,6 +28,7 @@ def seta():
     global key, index, selected_option
     while True:
         os.system("cls")
+        
         # receive the info of pressed arrows on the keyboard
 
         if key == b'\xe0':  # Arrow keys prefix
@@ -38,6 +39,7 @@ def seta():
                 index += 1
             elif key == b'q':  # Quit on 'q' key
                 break
+        
         
         if key == b'\r':  # Enter key
             print(f"You selected option {index + 1}")
