@@ -11,7 +11,7 @@ class Entity:
         self.vigor = vigor
         self.will = will
         self.wisdom = wisdom
-        self.rightHand = 0
+        self.rightHand = 2
         self.leftHand = 0
         self.health = mathCeil(8 + (self.vigor * 0.75) + (self.strength * 0.25))
 
