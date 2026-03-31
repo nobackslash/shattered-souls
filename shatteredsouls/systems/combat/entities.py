@@ -1,5 +1,6 @@
 from math import ceil as mathCeil
 from random import randint as randomInterger
+from weapon_list import weapon_list
 
 class Entity:
     def __init__(self, name, classe, strength, dexterity, vigor, will, wisdom):
@@ -28,24 +29,26 @@ class Entity:
         print(f"Left Hand: {self.leftHand}")
         print(f"Health: {self.health}")
 
+    def getWeaponName(self, weapon_id):
+        return weapon_list[weapon_id]["name"]
+
     def attack(self, alvo):
         # PRECISAMOS DEFINIR COMO QUE ATAQUES SÃO FEITOS, SE VAI USAR SKILL DA ENTIDADE, UM 1d20, OU OUTRAS FORMAS.
-        print(f"{self.name} está atacando {alvo.name} com {self.rightHand} e {self.leftHand}!")
+        print(f"{self.name} está atacando {alvo.name} com {self.getWeaponName(self.rightHand)} e {self.getWeaponName(self.leftHand)}!")
         if randomInterger(1, 20) + self.strength > 10:  # Simples teste de ataque
             damage = mathCeil(self.strength * 0.5)
             alvo.health -= damage
             print(f"Acertou! {alvo.name} recebeu {damage} de dano. Saúde restante: {alvo.health}")
+
 Goblin = Entity("Goblin", "BOT", 5, 3, 4, 2, 1)
 Heroi = Entity("Herói", "BOT", 4, 5, 4, 1, 1)
 Inimigo = Entity("Inimigo", "BOT", 3, 4, 5, 2, 1)
     
 
-
-Goblin.attack(Heroi)
-
 if __name__ == "__main__":
-                Goblin = Entity("Goblin", "BOT", 5, 3, 4, 2, 1)
-                Heroi = Entity("Herói", "BOT", 4, 5, 4, 1, 1)
-                Goblin.debugPrint()
-                Heroi.debugPrint()
-                Goblin.attack(Heroi)
+    Heroi.attack(Goblin)
+    Goblin = Entity("Goblin", "BOT", 5, 3, 4, 2, 1)
+    Heroi = Entity("Herói", "BOT", 4, 5, 4, 1, 1)
+    Goblin.debugPrint()
+    Heroi.debugPrint()
+    Goblin.attack(Heroi)

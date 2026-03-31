@@ -2,6 +2,7 @@ import os
 import random
 from weapon_list import weapon_list
 from entities import Entity
+from playerCombatChoices import drawPlayerOptions, processPlayerChoice
 
 def get_weapon(weapon_id: int):
     return weapon_list[weapon_id]["name"]
@@ -21,34 +22,27 @@ def melee_atack(attacker: Entity, defender: Entity):
     print(f"{attacker.name} atacou {defender.name} com {get_weapon(attacker.rightHand)}!")
     print(f"{defender.name} recebeu {damage} de dano! Saúde restante: {defender.health}")
 
-def draw_temp_ui(entity1: Entity, entity2: Entity):
+def drawEntitiesStatsUI(entity1: Entity, entity2: Entity):
     # we have 120 columns
-    print("|"+f"{entity1.name} (Health: {entity1.health})".center(58) + "|" + f"{entity2.name} (Health: {entity2.health})".center(58)+"|")
-    print("|"+f"(Mão Direita: {get_weapon(entity1.rightHand)})".center(58) + "|" + f"(Mão Direita: {get_weapon(entity2.rightHand)})".center(58)+"|")
+    string = ""
+    # print("|"+f"{entity1.name} (Health: {entity1.health})".center(58) + "|" + f"{entity2.name} (Health: {entity2.health})".center(58)+"|")
+    # print("|"+f"(Mão Direita: {get_weapon(entity1.rightHand)})".center(58) + "|" + f"(Mão Direita: {get_weapon(entity2.rightHand)})".center(58)+"|")
+    string += ("|"+f"{entity1.name} (Health: {entity1.health})".center(58) + "|" + f"{entity2.name} (Health: {entity2.health})".center(58)+"|")
+    string += ("\n|"+f"(Mão Direita: {get_weapon(entity1.rightHand)})".center(58) + "|" + f"(Mão Direita: {get_weapon(entity2.rightHand)})".center(58)+"|")
+    return string
 
-def draw_options():
-    print("1 -  atacar")
-    print("2 -  usar item")
-    print("3 -  fugir")
-    return input("Escolha uma opção: ")
-
+def drawCombatLog(log):
+    pass
 
 def engage_combat(entity1: Entity, entity2: Entity):
+    print("Entering combat...")
     while entity1.health > 0 and entity2.health > 0:
-        print("Entering combat...")
+        entstr = drawEntitiesStatsUI(entity1, entity2)
+        optstr = drawPlayerOptions()
+        print(entstr)
+        print(optstr)
+        processPlayerChoice()
 
-        draw_temp_ui(entity1, entity2)
-        opt = draw_options()
-
-        match opt:
-            case "1":
-                melee_atack(entity1, entity2)
-            case "2":
-                print("Usar item")
-            case "3":
-                print("Fugir")
-            case _:
-                print("Opção inválida")
     
     print("Combat ended!")
     print(f"{entity1.name} health: {entity1.health}")
