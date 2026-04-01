@@ -181,7 +181,7 @@ def run_title_with_menu():
     return menu_state.get('selection')
 
 
-def main():
+def introduction_main():
     pygame.mixer.init()
 
     hide_cursor()

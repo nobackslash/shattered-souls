@@ -1,4 +1,4 @@
-from shatteredsouls.systems.menu.intro import main
+from shatteredsouls.systems.menu.intro import introduction_main
 
 if __name__ == "__main__":
-    main()
+    introduction_main()
