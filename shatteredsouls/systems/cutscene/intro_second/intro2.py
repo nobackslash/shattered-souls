@@ -8,8 +8,8 @@ import shutil
 import re
 
 import shatteredsouls.assets as assets
-from shatteredsouls.sistemas.intro2.title import ascii_title
-from shatteredsouls.sistemas.intro2.glitchLoop import glitch_loop
+from shatteredsouls.assets.text.title import ascii_title
+from shatteredsouls.systems.cutscene.intro_second.style_effects import glitch_loop
 
 WIDTH = shutil.get_terminal_size().columns
 HEIGHT = shutil.get_terminal_size().lines

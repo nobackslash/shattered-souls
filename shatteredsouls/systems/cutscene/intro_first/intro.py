@@ -5,7 +5,7 @@ from turtle import clear
 import pygame
 # from util.config import WIDTH, HEIGHT
 # from asciiTitle import tituloLargo
-import intro.title as title
+import title as title
 
 # Initialize pygame and mixer at module level
 pygame.mixer.init()
