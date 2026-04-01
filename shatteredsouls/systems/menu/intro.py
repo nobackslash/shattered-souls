@@ -8,6 +8,7 @@ import shutil
 import re
 
 import shatteredsouls.assets as assets
+from shatteredsouls.systems.menu import exit
 from shatteredsouls.assets.text.title import ascii_title
 from shatteredsouls.systems.menu.style_effects import center_ansi, colorize_char
 
@@ -28,25 +29,59 @@ ANSI_REGEX = re.compile(r'\x1b\[[0-9;]*m')
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def color_line(text):
+def color_line(text, colorArg: dict):
+    if not colorArg:
+        raise ValueError("Color argument has not been specified.")
+
+    color_codes = {
+        "red": "\033[31m",
+        "purple": "\033[35m",
+        "dim_purple": "\033[2;35m",
+        "green": "\033[32m",
+        "blue": "\033[34m",
+        "yellow": "\033[33m",
+        "white": "\033[37m",
+        "black": "\033[30m",
+        "reset": "\033[0m"
+    }
+
+    try:
+        for key in colorArg:
+            if key in colorArg:
+                colorArg[key] = color_codes[colorArg[key]]
+            else:
+                raise ValueError(f"Color argument for '{key}' is missing.")
+    except KeyError as e:
+        raise KeyError(f"Invalid color name: {e.args[0]}. Valid options are: {', '.join(color_codes.keys())}")
+
     lower = text.lower()
     chars = list(text)
     colored = []
 
     i = 0
+    # while i < len(chars):
+    #     if lower[i:i+3] == "you":
+    #         for j in range(3):
+    #             colored.append(f"\033[2;35m{chars[i+j]}\033[0m")  # dim purple
+    #         i += 3
+    #     elif lower[i:i+4] == "died":
+    #         for j in range(4):
+    #             colored.append(f"\033[31m{chars[i+j]}\033[0m")  # red
+    #         i += 4
+    #     else:
+    #         colored.append(chars[i])
+    #         i += 1
+
     while i < len(chars):
-        if lower[i:i+3] == "you":
-            for j in range(3):
-                colored.append(f"\033[2;35m{chars[i+j]}\033[0m")  # dim purple
-            i += 3
-        elif lower[i:i+3] == "die":
-            for j in range(3):
-                colored.append(f"\033[31m{chars[i+j]}\033[0m")  # red
-            i += 3
+        if any(lower[i:i+len(word)] == word for word in colorArg):
+            matched_word = next(word for word in colorArg if lower[i:i+len(word)] == word)
+            color_code = colorArg[matched_word]
+            for j in range(len(matched_word)):
+                colored.append(f"{color_code}{chars[i+j]}{color_codes['reset']}")  # apply specified color
+            i += len(matched_word)
         else:
             colored.append(chars[i])
             i += 1
-
     return "".join(colored)
 
 
@@ -54,7 +89,8 @@ def type_line(text):
     current = ""
     for char in text:
         current += char
-        display = color_line(current)
+        colorArgs = {"you": "purple", "die": "red", "wrong": "red"} # example: color "you" in purple and "die" in red
+        display = color_line(current, colorArgs)
         print("\r" + center_ansi(display, WIDTH).ljust(WIDTH), end="", flush=True)
         time.sleep(0.04 if char != " " else 0.08)
     time.sleep(0.9)
@@ -83,7 +119,7 @@ def glitch_disappear(text_string):
         glitched = glitch_effect(text_string, intensity=intensity)
         visible_chars = int(len(text_string) * (1 - intensity))
         glitched = glitched[:visible_chars]
-        print("\r" + center_ansi(f"\033[31m{glitched}\033[0m", WIDTH).ljust(WIDTH), end="", flush=True)
+        print("\r" + center_ansi(f"\033[2;35mm{glitched}\033[0m", WIDTH).ljust(WIDTH), end="", flush=True)
         time.sleep(0.1)
 
 
@@ -92,7 +128,8 @@ def final_phase(text):
         awake = pygame.mixer.Sound(assets.sfx["glitch_sfx"])
         awake.play()
 
-        glitch_disappear(color_line(text))
+        colorArgs = {"░": "purple", "▒": "purple", "▓": "purple", "█": "purple"}
+        glitch_disappear(color_line(text, colorArgs))
 
         earlyCutoff = 3
         time.sleep(max(0, awake.get_length() - earlyCutoff))
@@ -215,11 +252,11 @@ def introduction_main():
     elif selection == 0:
         print("Start selecionado")
     elif selection == 1:
-        print("Load selecionado")
+        print(color_line("teste de cor", {"teste": "red", "cor": "blue"}))
     elif selection == 2:
         print("Options selecionado")
     elif selection == 3:
-        print("Exit selecionado")
+        exit.exit_intro()
 
 
 if __name__ == "__main__":
