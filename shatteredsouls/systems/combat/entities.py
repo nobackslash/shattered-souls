@@ -40,15 +40,14 @@ class Entity:
             alvo.health -= damage
             print(f"Acertou! {alvo.name} recebeu {damage} de dano. Saúde restante: {alvo.health}")
 
-Goblin = Entity("Goblin", "BOT", 5, 3, 4, 2, 1)
-Heroi = Entity("Herói", "BOT", 4, 5, 4, 1, 1)
-Inimigo = Entity("Inimigo", "BOT", 3, 4, 5, 2, 1)
-    
-
 if __name__ == "__main__":
-    Heroi.attack(Goblin)
     Goblin = Entity("Goblin", "BOT", 5, 3, 4, 2, 1)
     Heroi = Entity("Herói", "BOT", 4, 5, 4, 1, 1)
-    Goblin.debugPrint()
+
     Heroi.debugPrint()
+    Goblin.debugPrint()
+
+    Heroi.attack(Goblin)
     Goblin.attack(Heroi)
+
+    # Inimigo = Entity("Inimigo", "BOT", 3, 4, 5, 2, 1)

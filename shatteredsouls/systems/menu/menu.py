@@ -3,8 +3,6 @@ from shatteredsouls.systems.combat.entities import Entity
 import msvcrt
 import os
 
-print('Bem vindo ao jogo!')
-
 
 def seta():
     index = 0
@@ -91,6 +89,10 @@ def menu():
             print('=' * 25)
             print('Você saiu do jogo. :(')
             return False
+
+
+if __name__ == "__main__":
+    print('Bem vindo ao jogo!')
 
 
 

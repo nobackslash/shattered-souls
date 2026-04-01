@@ -1,8 +1,8 @@
 import os
 import random
-from weapon_list import weapon_list
-from entities import Entity
-from playerCombatChoices import drawPlayerOptions, processPlayerChoice
+from shatteredsouls.systems.combat.weapon_list import weapon_list
+from shatteredsouls.systems.combat.entities import Entity
+from shatteredsouls.systems.combat.player_choices import drawPlayerOptions, processPlayerChoice
 
 def get_weapon(weapon_id: int):
     return weapon_list[weapon_id]["name"]
@@ -43,7 +43,6 @@ def engage_combat(entity1: Entity, entity2: Entity):
         print(optstr)
         processPlayerChoice()
 
-    
     print("Combat ended!")
     print(f"{entity1.name} health: {entity1.health}")
 

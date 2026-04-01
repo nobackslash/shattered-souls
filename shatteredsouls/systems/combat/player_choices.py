@@ -31,7 +31,6 @@ def processPlayerChoice():
 
     if recentKey == b'\r':
         try:
-            # print("EXECUTANDO FUNCTION")
             opções[chosenOption]()
         except Exception as err:
             print("ERRO: ", err)
@@ -40,7 +39,6 @@ def drawPlayerOptions():
     global recentKey, choiceIndex, arrowKeyFlag, chosenOption
     optionsLine = ""
     index = 1
-    # print(choiceIndex)
     if recentKey == b'\xe0':
         return
 
@@ -48,11 +46,10 @@ def drawPlayerOptions():
         if choiceIndex == index - 1:
             optionsLine += ">> "
             chosenOption = name
-            
+
         optionsLine += f"{index} - {name} "
         index += 1
-    
-    # optionsLine += "\n"
+
     return optionsLine
 
 if __name__ == "__main__":

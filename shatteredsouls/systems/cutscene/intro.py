@@ -9,7 +9,7 @@ import re
 
 import shatteredsouls.assets as assets
 from shatteredsouls.assets.text.title import ascii_title
-from shatteredsouls.systems.cutscene.intro_second.style_effects import glitch_loop
+from shatteredsouls.systems.cutscene.style_effects import glitch_loop, center_ansi, visible_length
 
 WIDTH = shutil.get_terminal_size().columns
 HEIGHT = shutil.get_terminal_size().lines
@@ -21,19 +21,15 @@ def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def cleanup():
-    pygame.mixer.music.stop()
-    pygame.mixer.quit()
+    try:
+        pygame.mixer.music.stop()
+        pygame.mixer.quit()
+    except Exception:
+        pass
     print("\033[?25h", end="")
 
 atexit.register(cleanup)
 
-def visible_length(text):
-    return len(ANSI_REGEX.sub('', text))
-
-def center_ansi(text, WIDTH):
-    real_len = visible_length(text)
-    padding = max(0, (WIDTH - real_len) // 2)
-    return " " * padding + text
 
 def color_line(text):
     lower = text.lower()
@@ -56,6 +52,7 @@ def color_line(text):
 
     return "".join(colored)
 
+
 def type_line(text):
     current = ""
     for char in text:
@@ -65,19 +62,10 @@ def type_line(text):
         time.sleep(0.04 if char != " " else 0.08)
     time.sleep(0.9)
 
+
 def wipe_line():
     print("\r" + " " * WIDTH, end="", flush=True)
 
-# def glitch_text(text, intensity):
-#     result = ""
-#     for c in text:
-#         if random.random() < intensity:
-#             result += random.choice(glich_fx)
-#         elif random.random() < intensity * 0.3:
-#             result += " "
-#         else:
-#             result += c
-#     return result
 
 def glitch_effect(text: str, intensity: float = 0.1) -> str:
     global glich_fx
@@ -91,12 +79,6 @@ def glitch_effect(text: str, intensity: float = 0.1) -> str:
 
     return glitched_text
 
-# def glitch_disappear(text):
-#     for i in range(10):
-#         intensity = (i + 1) / 10
-#         glitched = glitch_effect(text, intensity)
-#         print("\r" + center_ansi(f"\033[31m{glitched}\033[0m", WIDTH).ljust(WIDTH), end="", flush=True)
-#         time.sleep(0.2)
 
 def glitch_disappear(text_string):
     for i in range(10):
@@ -104,27 +86,30 @@ def glitch_disappear(text_string):
         glitched = glitch_effect(text_string, intensity=intensity)
         visible_chars = int(len(text_string) * (1 - intensity))
         glitched = glitched[:visible_chars]
-        # print(f"\033[31m{glitched}\033[0m".center(WIDTH), end="\r")
         print("\r" + center_ansi(f"\033[31m{glitched}\033[0m", WIDTH).ljust(WIDTH), end="", flush=True)
         time.sleep(0.1)
 
 
 def final_phase(text):
-    awake = pygame.mixer.Sound(assets.sfx["glitch_sfx"])
-    # os.system("start")
-    awake.play()
+    try:
+        awake = pygame.mixer.Sound(assets.sfx["glitch_sfx"])
+        awake.play()
 
-    # Cause a "explosão" quando o awake tocar. e depois limpe.
-    glitch_disappear(color_line(text))
+        glitch_disappear(color_line(text))
 
-
-    earlyCutoff = 3
-    time.sleep(max(0, awake.get_length() - earlyCutoff))
+        earlyCutoff = 3
+        time.sleep(max(0, awake.get_length() - earlyCutoff))
+    except Exception:
+        time.sleep(1)
     clear()
 
+
 def show_title():
-    pygame.mixer.music.load(assets.sfx["title_sfx"])
-    pygame.mixer.music.play()
+    try:
+        pygame.mixer.music.load(assets.sfx["title_sfx"])
+        pygame.mixer.music.play()
+    except Exception:
+        pass
 
     original_lines = [list(line) for line in ascii_title.split("\n")]
     lines = [row.copy() for row in original_lines]
@@ -145,6 +130,7 @@ def show_title():
 
     time.sleep(1)
     return lines, original_lines, height
+
 
 def main():
     pygame.mixer.init()
