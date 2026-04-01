@@ -1,4 +1,5 @@
 from shatteredsouls.systems.menu.character_creation import cena
+from shatteredsouls.systems.combat.entities import Entity
 import msvcrt
 import os
 
@@ -11,20 +12,42 @@ def seta():
     while True:
         os.system('cls')
 
-        if index == 0:
-            opt1, opt2, opt3, opt4 = '>>', '  ', '  ', '  '
-        elif index == 1:
-            opt1, opt2, opt3, opt4 = '  ', '>>', '  ', '  '
-        elif index == 2:
-            opt1, opt2, opt3, opt4 = '  ', '  ', '>>', '  '
-        elif index == 3:
-            opt1, opt2, opt3, opt4 = '  ', '  ', '  ', '>>'
-        else:
-            index = 0
-            opt1, opt2, opt3, opt4 = '>>', '  ', '  ', '  '
+        match index:
+            case 0:
+                opt1 = "\033[95mStart\033[0m"
+                opt2 = "Load"
+                opt3 = "Options"
+                opt4 = "Exit"
+            case 1:
+                opt1 = "Start"
+                opt2 = "\033[95mLoad\033[0m"
+                opt3 = "Options"
+                opt4 = "Exit"
+            case 2:
+                opt1 = "Start"
+                opt2 = "Load"
+                opt3 = "\033[95mOptions\033[0m"
+                opt4 = "Exit"
+            case 3:
+                opt1 = "Start"
+                opt2 = "Load"
+                opt3 = "Options"
+                opt4 = "\033[95mExit\033[0m"
+            case _ if index > 3:
+                index = 0
+                opt1 = "\033[95mStart\033[0m"
+                opt2 = "Load"
+                opt3 = "Options"
+                opt4 = "Exit"
+            case _ if index < 0:
+                index = 3
+                opt1 = "Start"
+                opt2 = "Load"
+                opt3 = "Options"
+                opt4 = "\033[95mExit\033[0m"
 
         print('Navegue com as setas e confirme com Enter ("q" para sair)')
-        print(f"{opt1} Start    {opt2} Load    {opt3} Options    {opt4} Exit")
+        print(f"{opt1}    {opt2}    {opt3}    {opt4}".center(160))
 
         key = msvcrt.getch()
 
@@ -34,9 +57,9 @@ def seta():
         if key == b'\xe0':
             key = msvcrt.getch()
             if key == b'K':
-                index = (index - 1) % 4
+                index -= 1
             elif key == b'M':
-                index = (index + 1) % 4
+                index += 1
             continue
 
         if key == b'\r':
@@ -70,14 +93,5 @@ def menu():
             return False
 
 
-repetir = True
-# caso repetir for true, a função vai se repetir, caso for false, vai passar para a próx etapa.
-
-while repetir:
-    repetir = menu()
-
-escolher_classe = cena()
-print(f'{escolher_classe.name}, você escolheu a classe {escolher_classe.classe}!')
-print(f"Seus atributos são: Strength: {escolher_classe.strength}, Dexterity: {escolher_classe.dexterity}, Vigor: {escolher_classe.vigor}, Intelligence: {escolher_classe.will}, Wisdom: {escolher_classe.wisdom} e Health: {escolher_classe.health}.")
 
 

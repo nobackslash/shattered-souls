@@ -1,6 +1,6 @@
 from math import ceil as mathCeil
 from random import randint as randomInterger
-from weapon_list import weapon_list
+from shatteredsouls.systems.combat.weapon_list import weapon_list
 
 class Entity:
     def __init__(self, name, classe, strength, dexterity, vigor, will, wisdom):

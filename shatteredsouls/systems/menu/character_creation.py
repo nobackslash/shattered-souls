@@ -1,4 +1,4 @@
-from shatteredsouls.sistemas.combate.entidades import Entity
+from shatteredsouls.systems.combat.entities import Entity
 def cena():
     name1 = str(input('Escolha o seu nome: ')).capitalize()
     # jogador = Entity()
@@ -18,7 +18,7 @@ def cena():
                 classe = Entity(name1, classe, 1, 3, 4, 5, 2)
                 return classe
             case "VALQUIRIA":
-                classe = Entity(name1, classe, 4, 4, 4, 4, 4)
+                classe = Entity(name1, classe, 1, 5, 2, 4, 3)
                 return classe
     except:
 
