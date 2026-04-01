@@ -91,6 +91,39 @@ def menu():
             return False
 
 
+def format_menu_line(index):
+    options = []
+    for i, label in enumerate(["Start", "Load", "Options", "Exit"]):
+        if i == index:
+            options.append(f"\033[95m{label}\033[0m")
+        else:
+            options.append(label)
+    return f"{'    '.join(options)}".center(160)
+
+
+def interact_menu(menu_state):
+    while not menu_state.get('done', False):
+        key = msvcrt.getch()
+
+        if key in (b'\x00', b'\xe0'):
+            second = msvcrt.getch()
+            if second == b'K':
+                menu_state['index'] = (menu_state.get('index', 0) - 1) % 4
+            elif second == b'M':
+                menu_state['index'] = (menu_state.get('index', 0) + 1) % 4
+            continue
+
+        if key in (b'q', b'Q'):
+            menu_state['done'] = True
+            menu_state['selection'] = None
+            return
+
+        if key == b'\r':
+            menu_state['done'] = True
+            menu_state['selection'] = menu_state.get('index', 0)
+            return
+
+
 if __name__ == "__main__":
     print('Bem vindo ao jogo!')
 
