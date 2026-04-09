@@ -1,6 +1,6 @@
-if __name__ == "menu":
-    from shatteredsouls.systems.menu.character_creation import cena
-    from shatteredsouls.systems.combat.entities import Entity
+
+from shatteredsouls.systems.menu.character_creation import cena
+from shatteredsouls.systems.combat.entities import Entity
 import msvcrt
 import os
 

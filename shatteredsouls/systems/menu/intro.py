@@ -178,6 +178,12 @@ async def glitch_title_with_menu(original_lines, menu_state):
 
         # render only title area
         print("\033[H", end='')
+        print(f"""
+╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+
+
+╠═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+""", end='')
         for line in render_lines:
             colored_line = "".join(colorize_char(c) for c in line)
             # use clear-to-end to avoid remnants
@@ -188,7 +194,11 @@ async def glitch_title_with_menu(original_lines, menu_state):
             last_index = menu_state.get('index')
             print(f"\033[{menu_start_line + 1};1H", end='')
             print(format_menu_line(last_index).ljust(WIDTH), end='')
+        print("""╠═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
 
+
+
+╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝""", end='')
         step += 1
         await asyncio.sleep(0.05)
 
