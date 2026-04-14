@@ -1,5 +1,5 @@
 
-from shatteredsouls.systems.menu.character_creation import cena
+from shatteredsouls.systems.menu.character_creation import class_select
 from shatteredsouls.systems.combat.entities import Entity
 import msvcrt
 import os
@@ -46,7 +46,7 @@ def seta():
                 opt4 = "\033[95mExit\033[0m"
 
         print('Navegue com as setas e confirme com Enter ("q" para sair)')
-        print(f"{opt1}    {opt2}    {opt3}    {opt4}".center(160))
+        print(f"{opt1}    {opt2}    {opt3}    {opt4}".center(209))
 
         key = msvcrt.getch()
 

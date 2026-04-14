@@ -1,7 +1,7 @@
 import time
 import os
 
-from shatteredsouls.systems.menu import intro
+from shatteredsouls.systems.cutscene import intro
 
 def exit_intro():
     os.system('cls')

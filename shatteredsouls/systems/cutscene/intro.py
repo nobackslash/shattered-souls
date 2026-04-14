@@ -11,6 +11,9 @@ import shatteredsouls.assets as assets
 from shatteredsouls.systems.menu import exit
 from shatteredsouls.assets.text.title import ascii_title
 from shatteredsouls.systems.menu.style_effects import center_ansi, colorize_char
+from shatteredsouls.systems.util.lines import color_line
+import shatteredsouls.systems.ui.terminal as ui
+from shatteredsouls.systems.cutscene.easterEggDialogue import linesEaster
 
 # reuse menu helpers from the original menu module to keep that file authoritative
 from shatteredsouls.systems.menu.menu import format_menu_line, interact_menu
@@ -29,68 +32,19 @@ ANSI_REGEX = re.compile(r'\x1b\[[0-9;]*m')
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def color_line(text, colorArg: dict):
-    if not colorArg:
-        raise ValueError("Color argument has not been specified.")
-
-    color_codes = {
-        "red": "\033[31m",
-        "purple": "\033[35m",
-        "dim_purple": "\033[2;35m",
-        "green": "\033[32m",
-        "blue": "\033[34m",
-        "yellow": "\033[33m",
-        "white": "\033[37m",
-        "black": "\033[30m",
-        "reset": "\033[0m"
-    }
-
-    try:
-        for key in colorArg:
-            if key in colorArg:
-                colorArg[key] = color_codes[colorArg[key]]
-            else:
-                raise ValueError(f"Color argument for '{key}' is missing.")
-    except KeyError as e:
-        raise KeyError(f"Invalid color name: {e.args[0]}. Valid options are: {', '.join(color_codes.keys())}")
-
-    lower = text.lower()
-    chars = list(text)
-    colored = []
-
-    i = 0
-    # while i < len(chars):
-    #     if lower[i:i+3] == "you":
-    #         for j in range(3):
-    #             colored.append(f"\033[2;35m{chars[i+j]}\033[0m")  # dim purple
-    #         i += 3
-    #     elif lower[i:i+4] == "died":
-    #         for j in range(4):
-    #             colored.append(f"\033[31m{chars[i+j]}\033[0m")  # red
-    #         i += 4
-    #     else:
-    #         colored.append(chars[i])
-    #         i += 1
-
-    while i < len(chars):
-        if any(lower[i:i+len(word)] == word for word in colorArg):
-            matched_word = next(word for word in colorArg if lower[i:i+len(word)] == word)
-            color_code = colorArg[matched_word]
-            for j in range(len(matched_word)):
-                colored.append(f"{color_code}{chars[i+j]}{color_codes['reset']}")  # apply specified color
-            i += len(matched_word)
-        else:
-            colored.append(chars[i])
-            i += 1
-    return "".join(colored)
-
-
 def type_line(text):
     current = ""
     for char in text:
         current += char
-        colorArgs = {"you": "purple", "die": "red", "wrong": "red"} # example: color "you" in purple and "die" in red
-        display = color_line(current, colorArgs)
+        colorArgs = {"died": "red",
+                     "you": "purple", 
+                     "die": "red", 
+                     "end": "purple",
+                     "wrong": "red", 
+                     "Your": "purple",
+                     "your": "purple", 
+                     "forever": "red"} # example: color "you" in purple and "die" in red
+        display = color_line(current)
         print("\r" + center_ansi(display, WIDTH).ljust(WIDTH), end="", flush=True)
         time.sleep(0.04 if char != " " else 0.08)
     time.sleep(0.9)
@@ -129,7 +83,7 @@ def final_phase(text):
         awake.play()
 
         colorArgs = {"░": "purple", "▒": "purple", "▓": "purple", "█": "purple"}
-        glitch_disappear(color_line(text, colorArgs))
+        glitch_disappear(color_line(text))
 
         earlyCutoff = 3
         time.sleep(max(0, awake.get_length() - earlyCutoff))
@@ -178,12 +132,7 @@ async def glitch_title_with_menu(original_lines, menu_state):
 
         # render only title area
         print("\033[H", end='')
-        print(f"""
-╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
-
-
-╠═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
-""", end='')
+        
         for line in render_lines:
             colored_line = "".join(colorize_char(c) for c in line)
             # use clear-to-end to avoid remnants
@@ -194,11 +143,7 @@ async def glitch_title_with_menu(original_lines, menu_state):
             last_index = menu_state.get('index')
             print(f"\033[{menu_start_line + 1};1H", end='')
             print(format_menu_line(last_index).ljust(WIDTH), end='')
-        print("""╠═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
-
-
-
-╚═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝""", end='')
+      
         step += 1
         await asyncio.sleep(0.05)
 
@@ -234,11 +179,17 @@ def introduction_main():
     hide_cursor()
 
     lines_to_show = [
-        "one day you woke up",
-        "when you looked around, nothing was the same",
-        "you felt wrong, something was off",
-        "You knew you were going to die."
+        # "one day $$PURPLE$$you$$RESET$$ woke up",
+        # "when $$PURPLE$$you$$RESET$$ looked around, nothing was the same",
+        # "$$PURPLE$$you$$RESET$$ felt wrong, something was off",
+        # "$$PURPLE$$You$$RESET$$ knew you were going to die."
+        "^-^"
     ]
+
+    odds = random.randint(1, 100)
+    odds = 1 # force test line for now
+    if odds == 1:
+        lines_to_show.append(random.choice(linesEaster))
 
     print("\n" * 20)
 
@@ -257,15 +208,20 @@ def introduction_main():
     finally:
         show_cursor()
 
+    # MENU OPTIONS
+
     if selection is None:
         print("Menu foi cancelado. Saindo...")
-    elif selection == 0:
-        print("Start selecionado")
-    elif selection == 1:
-        print(color_line("teste de cor", {"teste": "red", "cor": "blue"}))
-    elif selection == 2:
+    elif selection == 0: # PLAY BUTTON
+        ui.draw_ui()
+        
+    elif selection == 1: # LOAD BUTTON
+        print(color_line("$$RED$$teste$$RESET$$ de $$BLUE$$cor$$RESET$$"))
+
+    elif selection == 2: # OPTIONS BUTTON
         print("Options selecionado")
-    elif selection == 3:
+
+    elif selection == 3: # EXIT BUTTON
         exit.exit_intro()
 
 

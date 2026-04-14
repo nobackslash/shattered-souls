@@ -1,5 +1,10 @@
 from shatteredsouls.systems.combat.entities import Entity
-def cena():
+
+from os import system
+
+def class_select():
+    system("cls")
+
     name1 = str(input('Escolha o seu nome: ')).capitalize()
     # jogador = Entity()
     classe = str(input('Escolha a sua classe: Mago, Guerreiro, Paladino, Clerigo ou Valquiria: ')).upper()
@@ -26,7 +31,7 @@ def cena():
     
         while classe not in ["MAGO", "GUERREIRO", "PALADINO", "CLERIGO", "VALQUIRIA"]:
             print('Ocorreu um erro, escolha uma classe válida.')
-            classe = cena()
+            classe = class_select()
             return classe
 
 
